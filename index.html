@@ -175,11 +175,18 @@
     /* ── SECTION ── */
     .section {
       margin-bottom: 60px;
-      opacity: 0;
-      transform: translateY(18px);
+      opacity: 1;
+      transform: translateY(0);
       transition: opacity 0.75s ease, transform 0.75s ease;
     }
-    .section.visible { opacity: 1; transform: translateY(0); }
+    .section.animate-hidden {
+      opacity: 0;
+      transform: translateY(18px);
+    }
+    .section.animate-hidden.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
 
     .section-heading {
       font-family: 'Inconsolata', monospace;
@@ -311,10 +318,11 @@
       margin-top: 90px;
       padding-top: 48px;
       border-top: 1px solid var(--rule);
-      opacity: 0;
+      opacity: 1;
       transition: opacity 1.2s ease;
     }
-    .colophon.visible { opacity: 1; }
+    .colophon.animate-hidden { opacity: 0; }
+    .colophon.animate-hidden.visible { opacity: 1; }
     .colophon-ornament { font-size: 16px; color: var(--gold); margin-bottom: 16px; letter-spacing: 10px; }
     .colophon-text { font-family: 'Inconsolata', monospace; font-size: 10px; letter-spacing: 3px; text-transform: uppercase; color: var(--text-dim); }
     .colophon-note { margin-top: 20px; font-style: italic; font-size: 15px; color: var(--text-dim); line-height: 1.7; }
@@ -1086,5 +1094,28 @@
 
 </div><!-- /page -->
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
-  const observer = 
+<script>
+  // Only animate elements that start below the visible viewport
+  // Elements already on screen when page loads stay fully visible
+  const animatables = document.querySelectorAll('.section, .colophon');
+
+  animatables.forEach(el => {
+    const rect = el.getBoundingClientRect();
+    if (rect.top > window.innerHeight) {
+      el.classList.add('animate-hidden');
+    }
+  });
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.06 });
+
+  document.querySelectorAll('.animate-hidden').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
