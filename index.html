@@ -3,33 +3,32 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>The Weight of Terabytes</title>
+  <title>The Weight of Terabytes — Complete Edition</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Inconsolata:wght@300;400&display=swap" rel="stylesheet">
   <style>
     :root {
       --bg: #0b0906;
-      --paper: #f5ead0;
       --gold: #c9941a;
-      --gold-dim: #8a6310;
+      --gold-dim: #7a5510;
       --text: #d4c4a8;
       --text-dim: #7a6a52;
       --text-bright: #f0e0c0;
       --rule: #2e2418;
       --accent: #e8c87a;
+      --red: #8b2020;
+      --nandi: #b8c8b0;
     }
-
     * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
 
     body {
       background: var(--bg);
       color: var(--text);
       font-family: 'EB Garamond', Georgia, serif;
       min-height: 100vh;
-      cursor: default;
     }
 
-    /* Grain overlay */
     body::before {
       content: '';
       position: fixed;
@@ -37,39 +36,25 @@
       background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.05'/%3E%3C/svg%3E");
       pointer-events: none;
       z-index: 0;
-      opacity: 0.5;
+      opacity: 0.45;
     }
 
-    /* Ambient glow */
-    body::after {
-      content: '';
-      position: fixed;
-      top: -200px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 600px;
-      height: 400px;
-      background: radial-gradient(ellipse, rgba(201,148,26,0.04) 0%, transparent 70%);
-      pointer-events: none;
-      z-index: 0;
-    }
-
+    /* ── LAYOUT ── */
     .page {
       position: relative;
       z-index: 1;
-      max-width: 700px;
+      max-width: 720px;
       margin: 0 auto;
-      padding: 80px 32px 120px;
+      padding: 80px 32px 140px;
     }
 
     /* ── MASTHEAD ── */
     .masthead {
       text-align: center;
       border-bottom: 1px solid var(--rule);
-      padding-bottom: 52px;
-      margin-bottom: 64px;
+      padding-bottom: 56px;
+      margin-bottom: 52px;
     }
-
     .masthead-tag {
       font-family: 'Inconsolata', monospace;
       font-size: 10px;
@@ -80,78 +65,90 @@
       opacity: 0;
       animation: fadeUp 0.8s ease 0.2s forwards;
     }
-
     .masthead h1 {
-      font-size: clamp(30px, 6vw, 52px);
+      font-size: clamp(30px, 6vw, 54px);
       font-weight: 400;
       line-height: 1.1;
       color: var(--text-bright);
       letter-spacing: -0.5px;
-      margin-bottom: 18px;
+      margin-bottom: 16px;
       opacity: 0;
       animation: fadeUp 0.8s ease 0.4s forwards;
     }
-
     .masthead-sub {
       font-size: 15px;
       font-style: italic;
       color: var(--text-dim);
-      max-width: 500px;
-      margin: 0 auto 36px;
+      max-width: 520px;
+      margin: 0 auto 8px;
       line-height: 1.7;
       opacity: 0;
-      animation: fadeUp 0.8s ease 0.6s forwards;
+      animation: fadeUp 0.8s ease 0.55s forwards;
+    }
+    .masthead-edition {
+      font-family: 'Inconsolata', monospace;
+      font-size: 10px;
+      letter-spacing: 3px;
+      color: var(--gold-dim);
+      text-transform: uppercase;
+      opacity: 0;
+      animation: fadeUp 0.6s ease 0.7s forwards;
+      margin-top: 12px;
     }
 
     /* ── TABLE OF CONTENTS ── */
     .toc {
-      background: rgba(201,148,26,0.04);
       border: 1px solid var(--rule);
       border-left: 3px solid var(--gold-dim);
-      padding: 24px 28px;
-      margin-bottom: 56px;
+      background: rgba(201,148,26,0.03);
+      padding: 28px 32px;
+      margin-bottom: 64px;
       opacity: 0;
-      animation: fadeUp 0.8s ease 0.8s forwards;
+      animation: fadeUp 0.8s ease 0.9s forwards;
     }
-
     .toc-title {
       font-family: 'Inconsolata', monospace;
       font-size: 10px;
       letter-spacing: 4px;
       text-transform: uppercase;
       color: var(--gold);
-      margin-bottom: 14px;
+      margin-bottom: 16px;
     }
-
     .toc a {
-      display: block;
-      font-size: 13px;
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      font-size: 14px;
       color: var(--text-dim);
       text-decoration: none;
-      padding: 4px 0;
+      padding: 5px 0;
       font-style: italic;
       transition: color 0.2s;
-      font-family: 'EB Garamond', Georgia, serif;
+      border-bottom: 1px dotted rgba(122,106,82,0.2);
+    }
+    .toc a:last-child { border-bottom: none; }
+    .toc a:hover { color: var(--accent); }
+    .toc a .toc-ch {
+      font-style: normal;
+      font-family: 'Inconsolata', monospace;
+      font-size: 10px;
+      color: var(--gold-dim);
+      letter-spacing: 2px;
     }
 
-    .toc a:hover { color: var(--accent); }
-
-    /* ── CHAPTER HEADER ── */
+    /* ── CHAPTER BREAK ── */
     .chapter-break {
       text-align: center;
-      margin: 72px 0 48px;
-      position: relative;
+      margin: 80px 0 52px;
     }
-
     .chapter-break::before {
       content: '';
       display: block;
       width: 100%;
       height: 1px;
-      background: linear-gradient(to right, transparent, var(--rule), transparent);
-      margin-bottom: 28px;
+      background: linear-gradient(to right, transparent, var(--rule) 30%, var(--rule) 70%, transparent);
+      margin-bottom: 32px;
     }
-
     .chapter-label {
       font-family: 'Inconsolata', monospace;
       font-size: 10px;
@@ -159,64 +156,102 @@
       text-transform: uppercase;
       color: var(--gold);
     }
-
     .chapter-title {
-      font-size: clamp(20px, 3.5vw, 30px);
+      font-size: clamp(22px, 4vw, 34px);
       font-weight: 400;
       color: var(--text-bright);
       margin-top: 10px;
       font-style: italic;
     }
+    .chapter-epigraph {
+      font-size: 14px;
+      font-style: italic;
+      color: var(--text-dim);
+      max-width: 420px;
+      margin: 18px auto 0;
+      line-height: 1.65;
+    }
 
     /* ── SECTION ── */
     .section {
-      margin-bottom: 56px;
+      margin-bottom: 60px;
       opacity: 0;
-      transform: translateY(16px);
-      transition: opacity 0.7s ease, transform 0.7s ease;
+      transform: translateY(18px);
+      transition: opacity 0.75s ease, transform 0.75s ease;
     }
-
-    .section.visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
+    .section.visible { opacity: 1; transform: translateY(0); }
 
     .section-heading {
       font-family: 'Inconsolata', monospace;
-      font-size: 11px;
+      font-size: 10px;
       letter-spacing: 3px;
       text-transform: uppercase;
       color: var(--gold);
-      margin-bottom: 20px;
+      margin-bottom: 22px;
       font-weight: 300;
     }
 
     .section p {
       font-size: 18px;
-      line-height: 1.9;
+      line-height: 1.92;
       color: var(--text);
       margin-bottom: 22px;
       text-align: justify;
       hyphens: auto;
     }
+    .section p + p { text-indent: 2em; }
+    .section p em { color: var(--accent); font-style: italic; }
 
-    .section p + p {
-      text-indent: 2.2em;
+    /* ── NANDI PROFILE BOX ── */
+    .nandi-profile {
+      border: 1px solid rgba(184,200,176,0.2);
+      border-left: 3px solid var(--nandi);
+      background: rgba(184,200,176,0.04);
+      padding: 28px 32px;
+      margin: 36px 0;
     }
+    .nandi-profile-title {
+      font-family: 'Inconsolata', monospace;
+      font-size: 10px;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: var(--nandi);
+      margin-bottom: 14px;
+      opacity: 0.8;
+    }
+    .nandi-profile p {
+      font-size: 16px;
+      line-height: 1.85;
+      color: #a8b8a0;
+      margin-bottom: 16px;
+      font-style: italic;
+    }
+    .nandi-profile p:last-child { margin-bottom: 0; }
 
-    /* pull-quote / emphasis */
+    /* ── PULL QUOTE ── */
     .pull-quote {
       border-left: 2px solid var(--gold-dim);
-      padding: 4px 0 4px 20px;
-      margin: 24px 0;
+      padding: 6px 0 6px 22px;
+      margin: 28px 0;
       font-style: italic;
       color: var(--accent);
-      font-size: 17px;
+      font-size: 18px;
+      line-height: 1.75;
     }
 
-    /* email mockup */
+    /* ── DIALOGUE / EXCHANGE ── */
+    .exchange {
+      padding: 6px 0 6px 24px;
+      margin: 8px 0;
+      font-size: 18px;
+      line-height: 1.85;
+      color: var(--text);
+    }
+    .exchange em { color: var(--accent); }
+
+    /* ── EMAIL BLOCK ── */
     .email-block {
-      background: rgba(255,255,255,0.03);
+      background: rgba(255,255,255,0.025);
       border: 1px solid var(--rule);
       border-top: 2px solid var(--gold-dim);
       padding: 24px 28px;
@@ -226,37 +261,63 @@
       line-height: 1.8;
       color: #a09080;
     }
-
     .email-block .field { color: var(--gold-dim); margin-right: 8px; }
     .email-block .value { color: var(--text); }
-    .email-block .body { margin-top: 16px; color: var(--text-dim); font-family: 'EB Garamond', serif; font-size: 15px; line-height: 1.7; font-style: italic; }
+    .email-block .body {
+      margin-top: 16px;
+      color: var(--text-dim);
+      font-family: 'EB Garamond', serif;
+      font-size: 16px;
+      line-height: 1.75;
+      font-style: italic;
+    }
 
-    /* colophon */
-    .colophon {
+    /* ── ORTHODOX ICON DIVIDER ── */
+    .orthodox-break {
       text-align: center;
-      margin-top: 80px;
-      padding-top: 40px;
-      border-top: 1px solid var(--rule);
-      opacity: 0;
-      transition: opacity 1s ease;
+      margin: 36px 0;
+      color: var(--gold-dim);
+      font-size: 18px;
+      letter-spacing: 12px;
+      opacity: 0.5;
     }
 
-    .colophon.visible { opacity: 1; }
-
-    .colophon-ornament {
-      font-size: 20px;
-      color: var(--gold);
-      margin-bottom: 16px;
-      letter-spacing: 8px;
+    /* ── POWER OUTAGE MOTIF ── */
+    .power-note {
+      font-family: 'Inconsolata', monospace;
+      font-size: 11px;
+      color: var(--text-dim);
+      letter-spacing: 2px;
+      text-align: right;
+      margin: -16px 0 28px;
+      opacity: 0.5;
     }
 
-    .colophon-text {
+    /* ── SCENE MARKER ── */
+    .scene-marker {
       font-family: 'Inconsolata', monospace;
       font-size: 10px;
-      letter-spacing: 3px;
+      letter-spacing: 4px;
       text-transform: uppercase;
       color: var(--text-dim);
+      text-align: center;
+      margin: 40px 0;
+      opacity: 0.4;
     }
+
+    /* ── COLOPHON ── */
+    .colophon {
+      text-align: center;
+      margin-top: 90px;
+      padding-top: 48px;
+      border-top: 1px solid var(--rule);
+      opacity: 0;
+      transition: opacity 1.2s ease;
+    }
+    .colophon.visible { opacity: 1; }
+    .colophon-ornament { font-size: 16px; color: var(--gold); margin-bottom: 16px; letter-spacing: 10px; }
+    .colophon-text { font-family: 'Inconsolata', monospace; font-size: 10px; letter-spacing: 3px; text-transform: uppercase; color: var(--text-dim); }
+    .colophon-note { margin-top: 20px; font-style: italic; font-size: 15px; color: var(--text-dim); line-height: 1.7; }
 
     /* ── ANIMATIONS ── */
     @keyframes fadeUp {
@@ -264,39 +325,49 @@
       to   { opacity: 1; transform: translateY(0); }
     }
 
-    /* ── SCROLLBAR ── */
-    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar { width: 3px; }
     ::-webkit-scrollbar-track { background: var(--bg); }
     ::-webkit-scrollbar-thumb { background: var(--gold-dim); border-radius: 2px; }
 
     @media (max-width: 600px) {
       .page { padding: 48px 20px 80px; }
       .section p { font-size: 16px; text-align: left; }
+      .toc a { font-size: 13px; }
     }
   </style>
 </head>
 <body>
-
 <div class="page">
 
   <!-- MASTHEAD -->
   <div class="masthead">
-    <div class="masthead-tag">East Rand Fiction &nbsp;·&nbsp; Ekurhuleni &nbsp;·&nbsp; 2025</div>
+    <div class="masthead-tag">East Rand Fiction &nbsp;·&nbsp; Ekurhuleni, Gauteng &nbsp;·&nbsp; 2025</div>
     <h1>The Weight of Terabytes</h1>
     <p class="masthead-sub">A story of Brakpan, broken ledgers, and a man betting everything on tomorrow's machine</p>
+    <div class="masthead-edition">Complete Edition — Seven Chapters</div>
   </div>
 
   <!-- TABLE OF CONTENTS -->
   <div class="toc">
     <div class="toc-title">Contents</div>
-    <a href="#ch1">Chapter One — The Load-Shedding Hours</a>
-    <a href="#ch2">Chapter Two — The Analyst</a>
+    <a href="#ch1"><span>Chapter One — The Load-Shedding Hours</span><span class="toc-ch">CH.I</span></a>
+    <a href="#ch2"><span>Chapter Two — The Analyst</span><span class="toc-ch">CH.II</span></a>
+    <a href="#nandi-study"><span>Character Study — Nandi Dlamini</span><span class="toc-ch">INTERLUDE</span></a>
+    <a href="#ch3"><span>Chapter Three — The Saturdays</span><span class="toc-ch">CH.III</span></a>
+    <a href="#ch4"><span>Chapter Four — The Orthodox Problem</span><span class="toc-ch">CH.IV</span></a>
+    <a href="#ch5"><span>Chapter Five — The Bank Moves Slowly</span><span class="toc-ch">CH.V</span></a>
+    <a href="#ch6"><span>Chapter Six — The Past Returns</span><span class="toc-ch">CH.VI</span></a>
+    <a href="#ch7"><span>Chapter Seven — The Server Problem</span><span class="toc-ch">CH.VII</span></a>
   </div>
 
-  <!-- ═══════════════════════════════ CHAPTER ONE ═══════════════════════════════ -->
+
+  <!-- ══════════════════════════════════════════════════════
+       CHAPTER ONE
+  ═══════════════════════════════════════════════════════ -->
   <div id="ch1" class="chapter-break">
     <div class="chapter-label">Chapter One</div>
     <div class="chapter-title">The Load-Shedding Hours</div>
+    <div class="chapter-epigraph">"A man who does not build will always be building."</div>
   </div>
 
   <div class="section">
@@ -331,9 +402,8 @@
     <div class="section-heading">IV. Fine-Tuning Dreams</div>
     <p>He had no GPU. This was the central comedy of Langa Ndimande's current existence. He was curating training data for large language models that would run on hardware that cost more than his house — a house that was technically still mortgaged to Absa, who had sent three letters and then, inexplicably, gone quiet.</p>
     <p>The irony was not lost on him. He had once moved other people's money through systems he barely understood, skimming confidence from YouTube tutorials and the bull market of 2020 that had made everyone look like a genius for eleven months. Now he moved data through systems he was beginning — slowly, with the particular hunger of a man who has nothing else — to actually understand.</p>
-    <p>He had found the papers on ArXiv. Then the GitHub repositories. Then the Discord servers where people shared fine-tuning scripts and argued about tokenisation at three in the morning. He had no GPU but he had time, and time, he was discovering, was the one resource that poverty had accidentally given him in abundance.</p>
     <p>He was building something specific: a financial reasoning dataset, South African in flavour, JSE-specific in its bones. The kind of dataset that a quant desk at Rand Merchant Bank or FirstRand would find useful. The kind that didn't exist yet because everyone building AI was building it for the S&P 500, for the Nasdaq, for markets where the volatility carried American accents.</p>
-    <p>He had written the pitch deck in his head seventeen times. He revised it on the taxi to the print shop where he printed tutoring worksheets. He refined it while the children worked through quadratic equations on Saturday mornings. He had not yet written it down. Writing it down made it vulnerable to being wrong.</p>
+    <p>He had written the pitch deck in his head seventeen times. He had not yet written it down. Writing it down made it vulnerable to being wrong.</p>
   </div>
 
   <div class="section">
@@ -341,98 +411,66 @@
     <p>At 9pm the street was quiet. Load-shedding had lifted and one bulb in the kitchen threw a yellow cone across the linoleum. Langa made two-minute noodles and ate standing at the counter, looking at nothing.</p>
     <p>On his phone, a WhatsApp notification: <em>Amahle drew a picture of you today. She says you have a computer instead of a face.</em></p>
     <p>Zanele had sent a photo. His daughter — eight years old, all her mother's forehead and his ears — had drawn a man at a desk, his head replaced by a rectangle with lines on it. She had written DADDY in red crayon underneath, with a heart.</p>
-    <p>Langa set the phone face-down.</p>
-    <p>He went back to the laptop.</p>
-    <p>The dataset had 47,000 rows now. He needed 200,000 for the pitch to be serious. At his current pace — two thousand rows a week, between tutoring sessions and data-scraping windows — he was four months away. Four months in which Absa might wake up. In which the municipality might process his account. In which the data on his external hard drive, his only backup, might fail the way everything eventually failed.</p>
-    <p>He opened a new spreadsheet tab. He titled it: <em>SENS_ANNOTATIONS_BATCH_24.</em></p>
+    <p>Langa set the phone face-down. He went back to the laptop.</p>
+    <p>The dataset had 47,000 rows now. He needed 200,000 for the pitch to be serious. He opened a new spreadsheet tab. He titled it: <em>SENS_ANNOTATIONS_BATCH_24.</em></p>
     <p>He worked until the load-shedding came back at midnight and took the light.</p>
     <p>In the dark, he sat for a while without moving. Through the window, the East Rand sky was doing what it always did — that amber-grey wash from the mine dumps and the street lights and the distant glow of Johannesburg, which had never quite decided whether it was a city of endings or beginnings.</p>
     <p>Langa thought: <em>200,000 rows. Then one email to the right address. Then everything changes.</em></p>
-    <p>He had thought versions of this before. About the algorithm. About the dashboard. About the investors' money that would compound into a future he could feel the shape of, warm and solid as a handshake.</p>
-    <p>He knew how that story ended.</p>
-    <p>But this — this was different. This was not confidence borrowed from a YouTube tutorial. This was 47,000 rows built by hand, one cell at a time, in the dark, in Brakpan, with nothing left to lose except the thing he was making.</p>
     <p>He decided to believe it.</p>
     <p>Outside, a dog barked twice and then the suburb was silent, and Langa Ndimande sat in the dark and waited for the power to come back, the way a man waits when he has learned that waiting is also a form of work.</p>
-  </div>
-
-  <div class="section">
-    <div class="section-heading">Epilogue to Part One</div>
-    <p>His name meant <em>to be persistent</em> in Zulu. His grandmother had told him this when he was small, sitting in her kitchen in KwaMashu, the smell of pap and woodsmoke and certainty.</p>
-    <p>He had forgotten for a while.</p>
-    <p>He was remembering now.</p>
+    <p>His name meant <em>to be persistent</em> in Zulu. His grandmother had told him this when he was small, sitting in her kitchen in KwaMashu, the smell of pap and woodsmoke and certainty. He had forgotten for a while. He was remembering now.</p>
   </div>
 
 
-  <!-- ═══════════════════════════════ CHAPTER TWO ═══════════════════════════════ -->
+  <!-- ══════════════════════════════════════════════════════
+       CHAPTER TWO
+  ═══════════════════════════════════════════════════════ -->
   <div id="ch2" class="chapter-break">
     <div class="chapter-label">Chapter Two</div>
     <div class="chapter-title">The Analyst</div>
+    <div class="chapter-epigraph">"She had the quality of complete attention — which is rarer than beauty, and lasts longer."</div>
   </div>
 
   <div class="section">
     <div class="section-heading">I. The Email He Rewrote Eleven Times</div>
-    <p>He found her through LinkedIn at 1am on a Thursday, in that specific hour when Brakpan was completely silent except for the sub-bass drone of the substation on the main road.</p>
-    <p>Her name was Nandi Dlamini. Senior Quantitative Analyst, Alternative Data & AI Strategy, Rand Merchant Bank. A graduate photo from Wits — economics and applied mathematics — and a profile that was curated with the particular precision of someone who had learned that visibility was its own kind of capital. She had published two internal white papers on NLP applications in emerging market credit scoring, which RMB had been proud enough to post publicly. Langa had read both papers twice. Then a third time with a notebook.</p>
+    <p>He found her through LinkedIn at 1am on a Thursday. Her name was Nandi Dlamini. Senior Quantitative Analyst, Alternative Data &amp; AI Strategy, Rand Merchant Bank. She had published two internal white papers on NLP applications in emerging market credit scoring, which RMB had been proud enough to post publicly. Langa had read both papers twice. Then a third time with a notebook.</p>
     <p>She knew what he was building. She just didn't know she knew.</p>
-    <p>He drafted the email on his phone because the laptop battery had given up at midnight. He wrote it in the dark, lying on his back on the single mattress that occupied what had once been the master bedroom and was now just the room where the data lived. His thumb moved slowly over the cracked screen protector.</p>
-    <p>The first draft was too eager. The second was too technical. The third sounded like a man who needed something, which was true but fatal. He rewrote it eight more times over three days, between tutoring sessions, between batches of SENS annotations, between the shallow sleeps of someone whose mind had not yet learned to rest.</p>
+    <p>He drafted the email on his phone because the laptop battery had given up at midnight. The first draft was too eager. The second was too technical. The third sounded like a man who needed something, which was true but fatal. He rewrote it eight more times over three days.</p>
     <p>The eleventh version was this:</p>
 
     <div class="email-block">
-      <div><span class="field">To:</span> <span class="value">n.dlamini@rmb.co.za</span></div>
-      <div><span class="field">Subject:</span> <span class="value">JSE-Specific Financial Reasoning Dataset — South African AI Fine-Tuning</span></div>
-      <div class="body">
-        Dear Ms. Dlamini,<br><br>
-        I have spent the past eight months building a structured dataset for fine-tuning financial language models on JSE-listed instruments — 200,000 annotated rows covering SENS filings, equity price history, macro indicators and multi-label sentiment classification, all localised to the South African market context that offshore models consistently misread.<br><br>
-        I noticed your work on NLP applications in EM credit. I think what I am building is the layer beneath what you are doing. I would welcome twenty minutes of your time.<br><br>
-        Regards,<br>
-        Langa Ndimande
-      </div>
+      <div><span class="field">To:</span><span class="value">n.dlamini@rmb.co.za</span></div>
+      <div><span class="field">Subject:</span><span class="value">JSE-Specific Financial Reasoning Dataset — South African AI Fine-Tuning</span></div>
+      <div class="body">Dear Ms. Dlamini,<br><br>
+      I have spent the past eight months building a structured dataset for fine-tuning financial language models on JSE-listed instruments — 200,000 annotated rows covering SENS filings, equity price history, macro indicators and multi-label sentiment classification, all localised to the South African market context that offshore models consistently misread.<br><br>
+      I noticed your work on NLP applications in EM credit. I think what I am building is the layer beneath what you are doing. I would welcome twenty minutes of your time.<br><br>
+      Regards,<br>Langa Ndimande</div>
     </div>
 
-    <p>He did not mention Brakpan. He did not mention the missing keyboard key. He did not mention that he had 47,000 rows, not 200,000, and that the gap between those two numbers was four months of tutoring children in his lounge for six hundred rand each.</p>
+    <p>He did not mention Brakpan. He did not mention the missing keyboard key. He did not mention that he had 47,000 rows, not 200,000.</p>
     <p>He sent it at 6:17am on a Friday and then walked to the kitchen and stared at the kettle for a long time without turning it on.</p>
   </div>
 
   <div class="section">
     <div class="section-heading">II. She Replied on a Monday</div>
-    <p>He had stopped checking his inbox by Sunday evening. This was a discipline he had cultivated after the liquidation — the practice of not waiting. Waiting had a cost. Waiting meant that your survival was contingent on someone else's decision, and he had already paid that particular price in full.</p>
-    <p>So the notification found him mid-sentence in the middle of a Saturday morning tutoring session, a red marker in his hand, correcting a grade-six algebra problem on the whiteboard. He felt his phone vibrate against his hip and did not look at it. He finished the correction. He explained the principle to a ten-year-old named Kagiso who understood it immediately and grinned with all her teeth. He collected his four thousand eight hundred rand in cash envelopes after the last child left.</p>
+    <p>He had stopped checking his inbox by Sunday evening. Waiting had a cost. Waiting meant that your survival was contingent on someone else's decision, and he had already paid that particular price in full.</p>
+    <p>So the notification found him mid-sentence during Saturday tutoring, a red marker in his hand. He felt his phone vibrate against his hip and did not look at it. He finished the correction. He explained the principle to a ten-year-old named Kagiso who understood it immediately and grinned with all her teeth. He collected his four thousand eight hundred rand in cash envelopes after the last child left.</p>
     <p>He looked at his phone in the empty lounge, standing in the particular silence that houses hold after children have left them.</p>
 
     <div class="email-block">
-      <div><span class="field">From:</span> <span class="value">n.dlamini@rmb.co.za</span></div>
-      <div><span class="field">Subject:</span> <span class="value">Re: JSE-Specific Financial Reasoning Dataset</span></div>
-      <div class="body">
-        Hi Langa,<br><br>
-        Thank you for reaching out. The framing of your dataset is interesting — you are right that EM localisation is a persistent gap in available training corpora. I'd be open to a brief call to understand the methodology and scope better.<br><br>
-        I'm available Wednesday at 2pm or Thursday at 10am. Whichever works for you.<br><br>
-        Nandi
-      </div>
+      <div><span class="field">From:</span><span class="value">n.dlamini@rmb.co.za</span></div>
+      <div><span class="field">Subject:</span><span class="value">Re: JSE-Specific Financial Reasoning Dataset</span></div>
+      <div class="body">Hi Langa,<br><br>
+      Thank you for reaching out. The framing of your dataset is interesting — you are right that EM localisation is a persistent gap in available training corpora. I'd be open to a brief call to understand the methodology and scope better.<br><br>
+      I'm available Wednesday at 2pm or Thursday at 10am.<br><br>Nandi</div>
     </div>
 
-    <p>He read it three times. Then sat down on the floor because the couch had a broken spring he kept meaning to fix.</p>
-    <p>He chose Wednesday. He would need Tuesday to prepare.</p>
+    <p>He read it three times. Then sat down on the floor because the couch had a broken spring he kept meaning to fix. He chose Wednesday. He would need Tuesday to prepare.</p>
   </div>
 
   <div class="section">
-    <div class="section-heading">III. The Problem of Tuesday</div>
-    <p>Tuesday arrived as a problem with several layers.</p>
-    <p>The first layer was technical. He needed to package a sample of the dataset cleanly enough to demonstrate without showing everything. He had read enough about deal-making to know that you showed the shape of the thing, not the thing itself. He spent Tuesday morning writing a methodology document in Google Docs — three pages, no flourish, all structure — and building a cleaned 5,000-row sample with a data dictionary that made the annotation logic legible to someone who hadn't built it from scratch.</p>
-    <p>The second layer was Langa himself.</p>
-    <p>He had found a photo of Nandi Dlamini from an RMB Innovation Summit held eight months ago. She was at a panel, laughing at something someone had said, and the laugh was unguarded in the way that professional photos rarely permitted. She was — and Langa had spent some time trying to find a more useful word and failed — <em>arresting.</em> The kind of face that reorganised the furniture of a room. High cheekbones, her grandmother's architecture, a mouth that had clearly decided very early on that it would not waste itself on small expressions.</p>
-    <p>He put his phone face-down and went back to the data dictionary.</p>
-    <p>He put his phone face-down six more times on Tuesday.</p>
-    <p>The third layer was the question of the call itself. He had no dedicated office. The lounge had a whiteboard with half-erased quadratic equations on it. His bedroom was the server room. The kitchen had a damp patch on the ceiling that looked, in certain lights, like a map of regret.</p>
-    <p>He decided on the lounge. He erased the whiteboard completely. He moved the plastic tutoring table. He put his one good chair — a wooden chair with a straight back that his mother had given him when he'd first rented the place, back when there had been a wife and a future and a reason for good chairs — in front of the wall that had the least to explain about itself.</p>
-    <p>He downloaded a virtual background. He did not use it. He had made his decision about who Langa Ndimande was going to be in this phone call, and that man did not hide behind a stock photo of a glass-walled office in an American city he had never visited.</p>
-    <p>He would be exactly where he was. The wall could be what it was.</p>
-    <p>He slept four hours and woke before the alarm.</p>
-  </div>
-
-  <div class="section">
-    <div class="section-heading">IV. Wednesday at Two</div>
-    <p>Her video came on a few seconds after his. The RMB background was exactly as he'd expected — that particular shade of corporate warm-grey that said <em>we have thought carefully about being approachable.</em> Behind her, a secondary monitor glowed with something he couldn't quite read. She wore a navy blazer over a white shirt and no jewellery except small gold earrings, and she looked exactly like her photograph except more alive, which photographs always failed to account for.</p>
+    <div class="section-heading">III. Wednesday at Two</div>
+    <p>Her video came on a few seconds after his. The RMB background was that particular shade of corporate warm-grey that said <em>we have thought carefully about being approachable.</em> She wore a navy blazer over a white shirt and no jewellery except small gold earrings, and she looked exactly like her photograph except more alive, which photographs always failed to account for.</p>
     <p>"Langa," she said, and said his name correctly without asking, with the ease of someone who grew up in a house where names were not obstacles. "Thanks for making the time."</p>
     <p>"Thank you for the reply," he said, and immediately moved past the pleasantries because pleasantries were where deals went to die. "I sent you a sample this morning. Five thousand rows, full data dictionary. I want to walk you through the annotation logic before you form an opinion about the methodology."</p>
     <p>Something shifted in her face — a small recalibration, the kind that happens when someone arrives slightly different from how you'd prepared for them.</p>
@@ -440,53 +478,313 @@
     <p>"Binary loses the material-versus-speculative distinction," Langa said. "And in South African filings that distinction does a lot of work. A CEO change at a mid-cap mining house and a CEO change at a JSE-listed bank read the same to an offshore model. They are not the same event."</p>
     <p>She looked at him for a moment. Not the polite attention of a professional meeting but actual looking, the kind that takes inventory.</p>
     <p>"How many rows do you have in total?"</p>
-    <p>Here was the number. The gap. The four months.</p>
     <p>"Currently 61,000," he said, because he had annotated fourteen thousand rows since her reply and had not slept properly in four days. "Target is 200,000. I'm on track to deliver a complete corpus in Q2."</p>
     <p>It was not a lie. It was an extremely ambitious version of the truth.</p>
-    <p>Nandi nodded, her fingers moving briefly — notes, he assumed, on something off-screen.</p>
-    <p>"What are you looking for from our side?" she asked. "Licensing? Acquisition? Co-development?"</p>
-    <p>"Licensing first," Langa said. "With a clause that preserves my ability to offer the dataset to other institutions outside of investment banking." He had rehearsed this sentence for three days. It came out clean. "I'm not looking for a buyout. I'm looking for a partnership that lets me keep building."</p>
-    <p>Another pause. The kind that had weight.</p>
-    <p>"Send me the full methodology document," she said. "And I'd want to see your scraping pipeline — not the code, just the architecture. If it's reproducible and legally defensible, we have something to take internally."</p>
-    <p>After the call ended, Langa sat very still in the straight-backed chair for a long time.</p>
-    <p>Then he opened a new terminal window and started annotating.</p>
+    <p>After the call ended, Langa sat very still in the straight-backed chair for a long time. Then he opened a new terminal window and started annotating. Batch thirty-two was not going to annotate itself.</p>
+  </div>
+
+
+  <!-- ══════════════════════════════════════════════════════
+       NANDI CHARACTER STUDY — INTERLUDE
+  ═══════════════════════════════════════════════════════ -->
+  <div id="nandi-study" class="chapter-break">
+    <div class="chapter-label">Interlude</div>
+    <div class="chapter-title">Nandi Dlamini — A Portrait</div>
+    <div class="chapter-epigraph">"She did not enter rooms. She recalibrated them."</div>
   </div>
 
   <div class="section">
-    <div class="section-heading">V. The Geometry of Patience</div>
-    <p>He thought about her on the taxi to buy groceries. He thought about her while annotating SENS batch thirty-one. He thought about her the way a man who has been alone for two years thinks about a woman who looked directly at him and found something worth looking at — which is to say, carefully, and with some supervision.</p>
-    <p>He was not confused about the situation. He was, after all, a man who had once confused confidence for competence, momentum for wisdom, a bull market for skill. He had learned, expensively, to name his errors before they named him.</p>
-    <p>This was a professional relationship. She was a senior quant at one of South Africa's most sophisticated investment banks. He was a man in Brakpan who taught algebra on Saturdays and had not paid a utility bill in three years.</p>
-    <p>These were not equivalent positions.</p>
-    <p>And yet. She had said his name correctly without asking. She had already read the sample before the call. She had not treated him like a cold email. She had treated him like a conversation.</p>
-    <div class="pull-quote">He made himself a rule: close the deal first. Every move made before the deal was closed was a move made from weakness, and Langa Ndimande was done making moves from weakness. He had a plan. It had two phases.</div>
-    <p>Phase one was 200,000 rows, a signed licensing agreement, and proof that the thing he had built in the dark in Brakpan was real and valuable and his. Phase two was everything else. He did not think about phase two in detail. Phase two was the kind of territory a man could only enter from solid ground, and the ground had to be built first, one annotated row at a time.</p>
-    <p>He emailed her the architecture document on a Thursday. She replied within the hour with three specific, intelligent questions. He answered them the same evening. She sent a calendar invite for a follow-up call the following week, this time including a colleague from the data procurement team.</p>
-    <p>It was progress. It tasted like something he had almost forgotten the flavour of.</p>
-    <p>In the kitchen, waiting for the kettle — which he had finally, deliberately, learned to actually turn on — he thought: <em>four months. Maybe three, if I push the batches.</em></p>
-    <p>From down the street came the sound of the generator starting its nightly complaint. The amber sky sat on the roof of Brakpan the way it always did, half threat and half promise.</p>
-    <p>Langa Ndimande stood in his kitchen and permitted himself, just briefly, to imagine what it would feel like to stand on ground of his own making and extend a hand — not as supplicant, not as debtor, not as a man whose failures preceded him — but as someone who had built a thing of genuine worth.</p>
-    <p>He imagined, just briefly, what Nandi Dlamini's face would look like when she shook that hand.</p>
-    <p>Then he went back to the laptop.</p>
-    <p>Batch thirty-two was not going to annotate itself.</p>
+    <div class="section-heading">I. What Meadowlands Made</div>
+    <p>She had grown up on a street in Meadowlands, Zone 8, where the houses were small and the ambitions were enormous and the two things existed without apology in the same square kilometre. Her father, Bongani Dlamini, taught mathematics at Orlando West High School for thirty-one years — the same school where students had once marched into a future nobody had planned for them — and he had the particular gravity of men who know that the subject they teach is not the subject they are actually teaching. What he taught, always, was precision. The willingness to be exactly right, to do the work until the answer was not approximately correct but completely correct, which were two entirely different things.</p>
+    <p>Nandi had understood this at nine years old. By twelve she had moved past her father in algebra and neither of them mentioned it, which was its own kind of tenderness.</p>
+    <p>Her mother, Thandi, ran a small insurance brokerage from a converted garage at the side of the house. She was not a mathematician. She was something more durable: a woman who understood that money was a form of language, and that if you did not learn to speak it fluently, other people would always be translating for you, with their own interests in the margins. She had built her client base entirely on referrals, and her referrals were entirely built on the fact that she never made a promise she could not keep. In Meadowlands, this was a currency more reliable than the rand.</p>
+    <p>Nandi had absorbed both of them. She had her father's precision and her mother's read of a room. This was an unusual combination. Most people had one or the other.</p>
+  </div>
+
+  <div class="section">
+    <div class="section-heading">II. The Wits Years, and What They Cost</div>
+    <p>She had gone to Wits on a merit bursary — applied mathematics and economics — and experienced the specific disorientation of being in a place that was theoretically built for everyone and practically built for a subset of everyone whose parents had been in the room when the blueprints were drawn. She was not the only student from Soweto. She was, in several of her third-year seminars, the only Black woman. She had learned not to perform either comfort or discomfort about this, because performing either was a form of concession she was not willing to make.</p>
+    <p>What she had found at Wits, beneath the disorientation, was the thing she had been moving towards her entire life without having a name for it: the point where mathematics and human behaviour intersected. Markets were not rational. She had known this the way children know things — by watching adults make choices that defied the logic they claimed to operate by. What she had not known, until Professor Amara Okafor introduced her to behavioural economics in her second year, was that the irrationality was structured. Predictable. Mappable. That you could build a model of human error with the same rigour you applied to any other system.</p>
+    <p>This had felt, to Nandi, like being handed the right tool for a job she had been attempting with her bare hands.</p>
+    <p>She wrote her Honours thesis on momentum anomalies in JSE small-cap stocks. Her examiners were impressed. One of them, a visiting professor from the University of Cape Town, said her methodology was "unusually mature." She had smiled and thanked him and spent the afternoon wondering what the "unusually" was doing in that sentence.</p>
+  </div>
+
+  <div class="section">
+    <div class="section-heading">III. How She Worked</div>
+    <p>At RMB she had a reputation that preceded her through the building with the particular velocity of things that are both true and slightly simplified. The simplified version was: brilliant, difficult to read, always right about data. The true version was more interesting.</p>
+    <p>She was not difficult to read. She was simply not performing. Most professional environments ran on a low constant hum of performance — people signalling their comfort, their engagement, their openness to feedback. Nandi had no interest in the signal. She had interest in the substance. If you said something worth her attention, you received it completely. If you did not, her face gave you that information directly, and she had stopped apologising for this sometime around her second year at the bank.</p>
+    <p>She worked the way her father had taught quadratic equations — completely, to the last decimal place, until the answer was not approximately right but actually right. She had a notebook she called <em>the shelf</em> — a brown Moleskine she kept in her desk drawer — full of ideas not ready to be built yet but too precise to lose. She had been adding to the shelf for four years. She had built three things from it. She expected to build four more.</p>
+    <p>She read late at night. She ran on Sunday mornings in Emmarentia, early, before the park filled with people. Running was the one activity that did not require her to be excellent at it. She found this restful in a way that was difficult to explain to anyone who had spent their whole life being good at the things they did.</p>
+
+    <div class="nandi-profile">
+      <div class="nandi-profile-title">On the Question of Men</div>
+      <p>She had not been in a relationship for two years. The last had ended when her former partner, a corporate lawyer named Siyanda, had said: "You are always somewhere else even when you are here." She had sat with that sentence for a long time. She had not disputed it. What she had not been able to explain to him — what she was not sure she could explain to anyone — was that the somewhere else was not indifference. It was the ongoing hum of problems she was in the middle of solving. It was the habit of mind that her father had given her and that her work had amplified until it was simply the atmosphere she lived in. She was always in the middle of a calculation. This was not coldness. It was the specific temperature of someone whose whole life was thought.</p>
+      <p>She had not found a person yet who could be in that room with her and not find it lonely.</p>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-heading">IV. What She Noticed About the Email</div>
+    <p>She received perhaps twelve cold emails a week from people with datasets, startups, ideas, pitches, and occasionally things they called "revolutionary frameworks" for understanding markets. She deleted most of them within four seconds. The deletion was not callousness. It was pattern recognition, which she trusted the way her father had trusted the answer at the bottom of a calculation: absolutely, until the working showed otherwise.</p>
+    <p>Langa Ndimande's email had stopped her deletion reflex for one specific reason. There was no desperation in it. Cold outreach was almost always structurally desperate — the subject line, the self-description, the pivot to the ask. His email had skipped the pivot. He had stated a fact, made a connection, and asked for twenty minutes. He had not told her what the dataset was worth. He had not told her how many potential clients he was in discussion with. He had not told her, in other words, any of the things that people told you when they were trying to manage your perception rather than share information.</p>
+    <p>She had opened the sample he sent the following morning and spent forty minutes with the data dictionary before their call. The three-tier sentiment taxonomy had been the thing. Not because it was clever — though it was — but because it revealed someone who had read the filings themselves, not just designed a system to classify them. You could not design that taxonomy from first principles alone. You had to have sat with the material until you understood what the material was actually doing.</p>
+    <p>She knew the difference. It was the difference between her father explaining a quadratic and a textbook explaining one.</p>
+    <p>After their first call, she had opened her brown notebook and written a single line on the last page: <em>Langa Ndimande — the layer beneath.</em> She did not know yet what that meant precisely. She had learned to trust that the shelf would tell her, eventually, if she was patient enough to wait for it.</p>
+  </div>
+
+
+  <!-- ══════════════════════════════════════════════════════
+       CHAPTER THREE
+  ═══════════════════════════════════════════════════════ -->
+  <div id="ch3" class="chapter-break">
+    <div class="chapter-label">Chapter Three</div>
+    <div class="chapter-title">The Saturdays</div>
+    <div class="chapter-epigraph">"Community is what you have when you can no longer afford solitude."</div>
+  </div>
+
+  <div class="section">
+    <div class="section-heading">I. The Bolt Philosophy</div>
+    <p>He did not own a car. This was not the East Rand way, where cars were a form of dignity and driving yourself was the first tier of proof that you had arrived somewhere. But Langa had liquidated his car eighteen months ago — a 2018 Polo, burgundy, one careful owner, which had been himself — and had discovered in its absence that Johannesburg was navigable by taxi and Bolt if you were willing to trade speed for the unexpected education of other people's windshields.</p>
+    <p>The drivers talked. This was the thing that surprised him, repeatedly, about moving through the East Rand on someone else's fuel. Drivers talked in the specific way of people who spent their working day in a confessional — except they were the ones confessing, because the passenger in the back seat was a stranger who would be gone in fourteen minutes and take whatever they'd said with them into the irretrievable past.</p>
+    <p>There was Mr. Khoza, sixty-one, former NUM shop steward at Ergo Mining before the retrenchments, who drove a white Corolla with a pine-tree air freshener and a discourse on post-industrial South Africa that could have doubled as a graduate seminar. "They told us the machines were coming," he said, once, watching the mine dump rise on the left side of the R51. "They did not tell us the machines would need people to teach them." He had looked at Langa in the rearview. "That is what you do, is it not?"</p>
+    <p>Langa had said: "Something like that."</p>
+    <p>There was Takudzwa, twenty-four, from Bulawayo, studying part-time at UNISA while driving. He kept his phone mounted on the dashboard with a secondary app running below the Bolt interface — a crypto portfolio tracker, green numbers flickering between rides. "I never have more than three hundred rand in it," he said when Langa asked. "I am learning how it moves. When I understand how it moves, I will put more." This was, Langa reflected, better risk management than he had applied to his own investors' R4.7 million.</p>
+    <p>And there was the driver — he never caught the name — who had looked at Langa through the mirror somewhere between Brakpan and Daveyton and said: "My nephew says you teach him maths on Saturdays. He says you explain things until they make sense, not just until the time is up." He had paused at a robot. "That is a scarce quality, mfowethu."</p>
+    <p>Langa had looked out the window at the East Rand scrolling past and thought: I used to think I was building a company. Perhaps I have only ever been doing this.</p>
+  </div>
+
+  <div class="section">
+    <div class="section-heading">II. Thabiso's Internet Café</div>
+    <p>The internet café on the main road in Tsakane was called Cyber Zone, but everyone called it Thabiso's, which was more honest. Thabiso Sithole had opened it with a loan from his mother five years ago on the premise that internet access was infrastructure, not luxury — a premise that was entirely correct and, like most correct premises, had not been sufficient to make him rich. The business survived on printing, on PlayStation time rented by the hour to teenagers, and on the municipal Wi-Fi contract Thabiso had won by submitting a tender application that was, by his own account, "eighty percent my words and twenty percent words I borrowed from a sample tender I found on the government website."</p>
+    <p>The café had twelve computers, a laminator, a broken water cooler that had become a shelf for uncollected print jobs, and a handwritten sign on the wall that said LOAD SHEDDING SCHEDULE — below which Thabiso had written, in a different pen: SCHEDULE SUBJECT TO ESKOM'S MOOD.</p>
+    <p>Langa spent two Saturdays a month here after tutoring, when he needed bandwidth for the larger scraping jobs and the municipal Wi-Fi was faster than his phone hotspot. He had known Thabiso since secondary school — they had been in the same science class, where Thabiso had distinguished himself by being the only student who consistently failed the theory components while building more sophisticated experiments than the teacher had designed. He was, Langa had always thought, a man whose intelligence had been assigned the wrong assessment rubric.</p>
+    <p>"You're still at it," Thabiso said, watching Langa's download bar on a Saturday afternoon in March. Not a question.</p>
+    <p>"I'm close," Langa said.</p>
+    <p>"You've been close for six months."</p>
+    <p>"I'm closer."</p>
+    <p>Thabiso put a mug of Five Roses on the desk beside him and returned to the counter, where a teenage boy was arguing about PlayStation time with the intensity of someone negotiating peace terms. This was how Thabiso expressed support — tea, proximity, and the courtesy of not asking follow-up questions.</p>
+  </div>
+
+  <div class="section">
+    <div class="section-heading">III. Mandla and Nomvula</div>
+    <p>Mandla Ngwenya sold refurbished phones from a table outside a tyre shop on the Daveyton side of things, and his relationship to risk was so fundamentally different from Langa's that they circled each other with the mutual fascination of people who have arrived at the same understanding of the world through entirely opposite routes.</p>
+    <p>Mandla bought broken phones from repair shops, fixed what could be fixed, sold what could be sold, and reinvested the margin before the rand had time to change its mind. His analysis was tactile, instinctive, completed in seconds. He held a phone and he knew. Langa had watched him do this and felt, each time, a complicated admiration — for the speed of it, and for what the speed required him not to know. Mandla's system worked precisely because he never paused long enough to doubt it.</p>
+    <p>On a Saturday in February, leaning against the tyre shop wall, Langa had tried to explain the dataset.</p>
+    <p>Mandla had listened with the expression of a man who was willing to be interested but needed evidence of a reason to be. When Langa finished, Mandla said: "So you're building something for people with money."</p>
+    <p>Langa had looked down at the pavement, at the dust and the old tyre marks and the singular ecology of a busy East Rand forecourt. Then he said, quietly: "No. I'm building something that might give me some."</p>
+    <p>Mandla had looked at him for a moment. Then he nodded — not the encouraging nod, not the sympathetic nod, but the specific nod of a man who has recognised the sentence another man has been waiting to say out loud. "Then build it fast," was all he said.</p>
+    <p>Nomvula Khumalo ran a catering operation from her home kitchen in Tsakane that supplied three office parks in Kempton Park, a monthly stokvels meeting in Boksburg, and two school tuck shops. She kept her books in a spreadsheet that was, by Langa's professional assessment, more rigorously structured than most of the investment dashboards he had built in his previous life. She had never taken an accounting course. She had taken a cash flow problem, once, and had solved it by calling twelve people in two hours and restructuring her payment terms across three clients in a single afternoon.</p>
+    <p>"You know what your problem is," she said to Langa one Saturday, distributing containers of food from the boot of her Nissan. "You built your first business for people who believed in you. Now you are building for people who don't know you exist." She handed him a container of pap and chicken. "That is harder, but it is more honest."</p>
+    <p>Langa ate standing up, leaning against the car, the East Rand afternoon wide and copper around him. He thought about that distinction for a long time afterward. Longer, perhaps, than any single insight from the ArXiv papers he had read.</p>
+  </div>
+
+
+  <!-- ══════════════════════════════════════════════════════
+       CHAPTER FOUR
+  ═══════════════════════════════════════════════════════ -->
+  <div id="ch4" class="chapter-break">
+    <div class="chapter-label">Chapter Four</div>
+    <div class="chapter-title">The Orthodox Problem</div>
+    <div class="chapter-epigraph">"The desert fathers built nothing visible. That was the point."</div>
+  </div>
+
+  <div class="section">
+    <div class="section-heading">I. The Small Corner</div>
+    <p>In the corner of the room where the dataset lived — between the external hard drive and the wall where the plaster had a crack shaped vaguely like a river delta — Langa kept a shelf. On it were three things: a small icon of Christ Pantocrator, its gold background worn at the edges where the previous owner had touched it; a beeswax candle in a red glass holder; and a prayer book with a cracked spine and Post-it notes marking fasting regulations and evening prayers.</p>
+    <p>There was no Orthodox church in Brakpan. There was no Orthodox church in any reasonable travelling distance of Brakpan. The nearest was a small Greek parish in Johannesburg North that held services in Greek and English alternately, and which Langa had visited twice — once to stand in the back and understand what he was looking for, and once to speak to the priest, Father Konstantinos, a small soft-spoken man from Thessaloniki who had looked at him with neither surprise nor excessive welcome, which was itself a form of welcome Langa had not expected.</p>
+    <p>"You came from far," Father Konstantinos had said.</p>
+    <p>"I come from everywhere far," Langa had answered, and the priest had nodded with the comprehension of a man who understood that this was a theological statement, not a geographical one.</p>
+    <p>He could not come regularly. The taxi fare was a calculation he could not always make work. So he practiced where he was, with what he had, in the manner he had slowly learned — from books, from forums, from a Romanian priest who streamed his liturgies from a monastery outside Sibiu and whose comment section was an improbable community of converts on multiple continents, many of them as geographically isolated as Langa, all of them attending the same service through the same screen that also carried, in other tabs, their loneliness and their work and their ordinary lives.</p>
+  </div>
+
+  <div class="section">
+    <div class="section-heading">II. Faith as Infrastructure</div>
+    <p>He had found Orthodoxy the way certain people find things — not through seeking, but through recognition. He had been reading about Byzantine history, tangentially, through a Wikipedia spiral that had begun with a search about early medieval trade routes and ended, three hours later, with a video of an all-night vigil at a monastery on Mount Athos. He had watched the video to the end. Then he had watched it again. There was something in it that had no name yet — a quality of labour that expected nothing from its visibility. The monks sang for hours in the dark. No one was filming them for inspiration content. They were doing the work because the work was the point.</p>
+    <p>This was, he had slowly understood, the only relationship to labour he trusted anymore. His first company had been built on visibility — the performance of competence, the Instagram of the entrepreneurial self, the LinkedIn post about the journey. The dataset was built in the opposite direction: inward, invisible, patient, without an audience, in the dark of Brakpan while the East Rand slept.</p>
+
+    <div class="pull-quote">Faith, Langa had discovered, was easier to practice when nobody around you understood it. The absence of community removed the temptation to perform the faith rather than inhabit it.</div>
+
+    <p>He fasted on Wednesdays and Fridays, which in practical terms meant skipping breakfast and eating simply in the evening. The skipping of breakfast cost him nothing he could not afford to forgo. The simplicity of the evening meal was indistinguishable from his ordinary poverty. He was not sure whether this made the fasting more or less meaningful. He had decided it made it more so — that practicing an ascetic discipline when you are already materially thin was a different act than practicing it from abundance. It was the difference between choosing less and choosing less deliberately.</p>
+    <p>The icon watched the dataset from across the room. He had not arranged this with any particular intention. It had simply become the arrangement — the gold face of the Pantocrator looking at the spreadsheets, the annotated filings, the slow accumulation of a thing that might, in time, become a kind of salvation. He was not sure what the icon made of the dataset. He suspected it was not impressed by it in the way he needed it to be impressed. This was, possibly, the point of icons.</p>
+  </div>
+
+  <div class="section">
+    <div class="section-heading">III. The Romanian Priest's Sermon</div>
+    <p>One Thursday night, in the amber light of a load-shedding reprieve, Father Gheorghe's livestream sermon translated haltingly through subtitles that were clearly the work of an AI model trained on formal theological language rather than pastoral speech. The priest was speaking about the concept of <em>nepsis</em> — watchfulness, sobriety of spirit, attention without anxiety.</p>
+    <p>The subtitle read: <em>To be watchful is not to be vigilant in the sense of the fearful man. It is to be awake to the present moment with full understanding, without grasping for the next moment or mourning the last.</em></p>
+    <p>Langa had read this sentence three times. Then he had minimised the livestream tab and opened his annotation spreadsheet. He thought about the distinction between watchfulness and anxiety for the rest of that session, working through batch thirty-five, and he understood something he could not quite articulate about why he had been able to sit in the dark of the dataset for eight months without collapsing — when he had been unable, before, to sit inside failure for eight days without making a decision he would regret.</p>
+    <p>The difference was not hope. He had had hope before, vast and reckless and borrowed from other men's success stories. The difference was something quieter. The willingness to be where he actually was, doing what he was actually doing, without the overlay of where it was supposed to be taking him. The dataset was its own argument. Every row was complete in itself. The 200,000 was the shape it would eventually take, but every batch of two thousand was already, in some sense, fully itself.</p>
+    <p>He was not sure this was Orthodox theology. He suspected Father Gheorghe might have some reservations about the application. But at 11pm in Brakpan, with the external hard drive blinking its patient green light, it was the closest thing to a sermon he had.</p>
+  </div>
+
+
+  <!-- ══════════════════════════════════════════════════════
+       CHAPTER FIVE
+  ═══════════════════════════════════════════════════════ -->
+  <div id="ch5" class="chapter-break">
+    <div class="chapter-label">Chapter Five</div>
+    <div class="chapter-title">The Bank Moves Slowly</div>
+    <div class="chapter-epigraph">"An institution is a collection of individual cautions."</div>
+  </div>
+
+  <div class="section">
+    <div class="section-heading">I. David Stein's Reservations</div>
+    <p>The second call included a colleague. His name was David Stein, and he was introduced as Head of Data Procurement, and his face on the screen had the considered blankness of a man who had learned to read without showing that he was reading. He was perhaps fifty-five, with the slightly wind-scoured look of someone who had spent decades in the Johannesburg financial world and had been changed by it in the specific way that long exposure changes things — not broken, but worn to a particular smoothness.</p>
+    <p>Nandi ran the introduction. David Stein asked the first question. "Mr. Ndimande, the SENS data — your scraping methodology. Can you walk us through the legal defensibility of the dataset?"</p>
+    <p>Langa had expected this. He had spent three days preparing for this. "All data sourced from publicly available SENS feeds, JSE Open Data portal, and South African Reserve Bank published statistics. The annotation — the classification work — is entirely original. The intellectual property in the dataset is the taxonomy and the annotation, not the underlying price data."</p>
+    <p>David Stein had made a note. "And the annotation was performed by yourself alone?"</p>
+    <p>"Entirely."</p>
+    <p>"No offshore labour? No crowdsource platforms?"</p>
+    <p>"No. Every row is mine." He had paused. "I can provide git commit history with timestamps if the provenance matters."</p>
+    <p>Something moved at the edge of David Stein's expression. Not quite respect — David Stein was too experienced to offer that cheaply — but a recalibration of the category into which he had initially placed Langa Ndimande. Langa had seen this before, in other meetings, in another life when he had still been building the wrong things. He recognised the moment when a room decided you were a different size than it had assumed.</p>
+    <p>Nandi said nothing during this exchange. She was watching David Stein. This, Langa would only later understand, was what she had been there to do.</p>
+  </div>
+
+  <div class="section">
+    <div class="section-heading">II. Ayanda Mokoena</div>
+    <p>The third call was different. It included a fourth person — a junior data scientist named Ayanda Mokoena who was clearly there to conduct a technical evaluation and who asked questions with the focused urgency of someone who had only recently discovered that asking the right question was a form of power and had not yet learned to spend that power conservatively.</p>
+    <p>She wanted to know about the tokenisation logic. She wanted to know how he had handled the bilingual SENS announcements — the ones filed in both English and Afrikaans — and whether the sentiment annotations were language-specific or language-agnostic. She wanted to know about the macro indicator alignment: were the SENS annotations time-stamped to the announcement date or to the trading day?</p>
+    <p>Langa answered each question precisely, and the precision was not performance. He had built every layer of this architecture himself, in the dark, in the specific way that you build something when there is nobody else to answer questions about it and the questions are therefore questions you must ask yourself, repeatedly, until the answers are completely right and not just approximately right.</p>
+    <p>Ayanda had made, at some point in the third hour of that session, an expression that Langa had learned to recognise across the arc of his life in technical spaces: the face of a person who has just encountered something they had not known they were looking for. It was a brief expression. She had filed it away. He had filed that she had filed it.</p>
+    <p>He received a calendar invite from her two days later. The subject line was: <em>Dataset — Technical Review — Informal.</em> It was not an official bank meeting. It was Ayanda Mokoena using her lunch hour. He understood then that he had an ally inside the institution, placed there by the logic of the work itself, which was the best kind of ally — one who was not loyal to him, but to the thing he had made.</p>
+  </div>
+
+  <div class="section">
+    <div class="section-heading">III. The Due Diligence Letter</div>
+    <p>It arrived on a Tuesday, three weeks after the second call. A formal email from RMB's legal team requesting documentation: proof of data provenance, a full technical architecture document, evidence of original authorship, and — the line that turned Langa's stomach briefly to stone — <em>a summary of any prior business ventures and any relevant regulatory or legal proceedings.</em></p>
+    <p>He sat with that line for a long time.</p>
+    <p>He had not expected the past to arrive this particular way — not through confrontation but through a form field, a checkbox, a bureaucratic requirement for disclosure. He had thought the past was something he would eventually decide to reveal, on his terms, when the ground was solid enough. He had not thought the ground would open the question before he was ready.</p>
+    <p>He wrote a one-page disclosure. He stated what had happened with full accuracy — the fund, the trading strategy, the loss, the liquidation proceedings, the outcome. He did not editorialise. He did not offer explanation in place of fact. He had learned, from the data work, that the most credible thing you could do with information was to present it without management.</p>
+    <p>He sent it to Nandi directly, separately from the legal submission. He wrote two lines above it: <em>This is in the formal submission. I wanted you to see it first. I will not insult you by explaining it.</em></p>
+    <p>She replied four hours later. <em>I appreciate this. See you Thursday.</em></p>
+    <p>He did not know what <em>I appreciate this</em> meant, exactly. He knew it was not nothing. He filed it in the place where he kept the things he was not yet ready to examine.</p>
+  </div>
+
+
+  <!-- ══════════════════════════════════════════════════════
+       CHAPTER SIX
+  ═══════════════════════════════════════════════════════ -->
+  <div id="ch6" class="chapter-break">
+    <div class="chapter-label">Chapter Six</div>
+    <div class="chapter-title">The Past Returns</div>
+    <div class="chapter-epigraph">"Guilt and credibility are not the same problem, though they feel identical from the inside."</div>
+  </div>
+
+  <div class="section">
+    <div class="section-heading">I. A Knock on a Saturday</div>
+    <p>Sipho Khumalo arrived on a Saturday morning in March, between the seven o'clock tutoring session and the one that started at nine. Langa heard the knock while he was erasing the whiteboard, and the particular rhythm of it — three knocks, a pause, two more — triggered a memory before his mind had consciously processed who it must be. He stood with the eraser in his hand for a moment. Then he went to the door.</p>
+    <p>Sipho had been one of the first investors — fifty thousand rand, the savings from four years of teaching at a technical college in Germiston, transferred with the particular trust of a man who had watched Langa explain a strategy over two hours and had believed not because the strategy was foolproof but because the young man explaining it seemed to genuinely believe in it himself. That was the quality that had made Langa dangerous, in the end. He had never been a fraudster. He had been something worse: a true believer in his own miscalculation.</p>
+    <p>Sipho looked older. Not in the way time made people older, but in the way that certain experiences rearranged a face's relationship to uncertainty. He looked like a man who had learned to expect less and had made a kind of peace with that learning, and the peace had cost him something in its achievement.</p>
+    <p>"I heard you were still in Brakpan," Sipho said, on the step.</p>
+    <p>"Come in," said Langa.</p>
+    <p>He made tea. There was no food worth offering. He offered it anyway and Sipho declined with the courtesy of a man who was not there for tea. They sat in the lounge — the whiteboard behind them still showing ghost traces of quadratic equations, the laptop on the table, the external hard drive blinking its quiet persistence — and there was a silence between them that was not hostile but had weight.</p>
+  </div>
+
+  <div class="section">
+    <div class="section-heading">II. What Sipho Asked</div>
+    <p>"I am not here to collect anything," Sipho said. "I know there is nothing to collect. I just wanted to see." He looked around the room — not unkindly, but completely, taking it in. "I wanted to see what you were doing with it."</p>
+    <p>"With what?"</p>
+    <p>"The time," Sipho said. "After."</p>
+    <p>Langa had not expected this to be the question. He had expected anger, or the cold formality of a man who had decided to forgive on paper but not in person. He had not expected curiosity. He had not expected to be asked about time.</p>
+    <p>He showed Sipho the dataset. Not because he had planned to, but because it was the only honest answer to the question of what he had done with the time after. He opened the spreadsheet. He walked him through the SENS annotations — not technically, but in plain language. What this column meant. Why this classification mattered. What a model trained on this data would understand about South African markets that no existing model understood.</p>
+    <p>Sipho listened the way he had listened to the original pitch — carefully, with the full attention of a man who had learned that full attention was the only intelligent way to engage with information you might need to make decisions about. But this was not the same as before. Before, Langa had been performing a competence he had partly borrowed. Now he was reporting from a place he had actually been.</p>
+    <p>When he finished, Sipho was quiet for a moment. Then he asked: "If this thing works — are you going to become rich?"</p>
+    <p>Langa looked at the spreadsheet. At the 112,000 rows. At the icon watching from its corner shelf.</p>
+    <p>"If this works," he said, "I become solvent."</p>
+    <p>Sipho nodded slowly. He looked at the word for a moment — <em>solvent</em>, and everything it contained about the distance between where Langa had been and where he was trying to get back to. The word was not ambitious. It was honest. And honesty, after everything, was the one currency between them that had not been spent.</p>
+    <p>"Then build it properly," Sipho said. He stood. He picked up his jacket from the back of the chair. At the door, he paused. "Kagiso — the girl you tutored last year. My niece." He did not look back. "She passed her maths with distinction. First in her family."</p>
+    <p>He left. Langa stood in the doorway until the sound of his footsteps had gone down the path and turned onto Van Riebeeck Avenue and dissolved into the ordinary noise of a Brakpan Saturday. Then he closed the door and sat down in front of the laptop and annotated for six hours without stopping.</p>
+  </div>
+
+  <div class="section">
+    <div class="section-heading">III. What Guilt Actually Is</div>
+    <p>He had thought for a long time that guilt was a feeling. That it would diminish when the feeling diminished — that you metabolised it, the way you metabolised other painful experiences, and what remained was scar tissue and a lesson and the possibility of moving on.</p>
+    <p>He had been wrong about this. Guilt was not a feeling. Guilt was a relationship. It required two parties and it changed whenever either party changed. Sipho had changed. He was not the same man who had sat across from Langa in 2021 with a bank statement and a handshake. He had absorbed the loss and restructured around it, and the Sipho who had sat in the lounge today was a man who had completed that process and come to see not the debt but the person.</p>
+    <p>This was, Langa thought, harder to carry than anger would have been. Anger he knew how to carry. Forgiveness — partial, adult, complicated, not absolution but acknowledgement — was a different weight entirely. It required him to be the same size as what had happened to him. Not smaller, not larger. The same size.</p>
+    <p>He worked until the load-shedding came at midnight. In the dark, he thought about solvency. He thought about what a word meant when it was the most ambitious thing you allowed yourself to want.</p>
+    <p>Outside, the amber sky. The generator down the street. The East Rand turning slowly under its own particular gravity, as it always had, as it always would.</p>
+  </div>
+
+
+  <!-- ══════════════════════════════════════════════════════
+       CHAPTER SEVEN
+  ═══════════════════════════════════════════════════════ -->
+  <div id="ch7" class="chapter-break">
+    <div class="chapter-label">Chapter Seven</div>
+    <div class="chapter-title">The Server Problem</div>
+    <div class="chapter-epigraph">"The fragility of infrastructure is never about the hardware."</div>
+  </div>
+
+  <div class="section">
+    <div class="section-heading">I. 149,622 Rows</div>
+    <p>The dataset had reached 149,622 rows on a Thursday afternoon when the external hard drive made a sound.</p>
+    <p>It was a small sound. A click, followed by a brief whir that resolved into silence rather than resuming. Langa heard it the way you hear the sound that precedes an accident — not as alarm, but as information arriving slightly ahead of its consequences. He looked at the drive. The green light was still on. He opened File Explorer. The drive appeared. He opened the main folder.</p>
+    <p>The folder opened slowly. Too slowly. Then it hung.</p>
+    <p>He waited three minutes with the patience of a man who had learned to distinguish between a system under load and a system in distress. Then he opened the terminal and ran a disk check. The disk check returned seventeen bad sectors and one corrupted partition table, and for a moment the specific silence of Brakpan at 4pm — the generators not yet running, the children not yet home, the suburb in its brief daily pause between efforts — pressed against the windows with the weight of everything he had not backed up.</p>
+    <p>He had meant to back up to Google Drive. He had started the process four times. Each time, the automated scraping flags had triggered a warning on his free account, and he had postponed, and postponed, and the postponing had become a kind of low-grade assumption that he would deal with it later and later had not come.</p>
+    <p>149,622 rows. Fifty thousand from the target. Five months of work.</p>
+    <p>He sat very still.</p>
+  </div>
+
+  <div class="section">
+    <div class="section-heading">II. The Recovery Window</div>
+    <p>He spent forty minutes on data recovery forums. He found a procedure. The procedure required a Linux live environment, a second drive, and a tool called <em>ddrescue</em> that would attempt to clone the failing drive sector by sector, working around the bad blocks. He did not have a second drive. He had thirty-four rand in his bank account and a Capitec card that would decline on the thirty-fifth rand.</p>
+    <p>He did not call Thabiso, who would have helped. He did not call Mandla, who would have sourced a drive from somewhere in forty minutes. He sat with the logic of what was required and what he had and the space between those two things, which was a space he had spent two years learning to navigate without panic.</p>
+    <p>Then he opened his email and wrote to Nandi Dlamini.</p>
+    <p>The email was four lines. He described the situation without framing it as a crisis, because it was a crisis and he had learned that framing things as crises was an invitation for people to manage your crisis rather than help you solve it, and these were different things. He stated what he needed: temporary cloud storage of approximately 40GB, and, if she had access to institutional compute, a one-time write operation to move the recoverable data off the failing drive onto a secure location.</p>
+    <p>He sent it at 4:47pm.</p>
+    <p>She replied at 5:02pm: <em>Call me.</em></p>
+  </div>
+
+  <div class="section">
+    <div class="section-heading">III. The Call at Five</div>
+    <p>She answered on the first ring, which was unusual. He had learned her patterns over three months of intermittent contact — she typically let calls ring twice, a habit he suspected was deliberate, a small architecture of professional proportion. The first ring meant she had been waiting.</p>
+    <p>"Tell me the exact failure mode," she said, without greeting. This too was new — the removal of the professional wrapper. It was not rudeness. It was the register of someone who had decided that a situation did not require the performance of procedure.</p>
+    <p>He told her. She was quiet while he spoke. He heard, faintly, the sound of keys — she was typing while listening, which he recognised as its own form of attention.</p>
+    <p>"I can provision you a secure RMB cloud storage bucket," she said. "It will take me fifteen minutes. It is not formally sanctioned for external use, but I am classifying it as due diligence storage for the procurement evaluation, which is accurate." A brief pause. "Is that acceptable to you?"</p>
+    <p>"Yes."</p>
+    <p>"You will need to run the ddrescue clone to a local temp drive first, then transfer. Do you have a second physical drive?"</p>
+    <p>"No."</p>
+    <p>A silence. Not the silence of judgment — he had by now learned to distinguish the qualities of her silences, which was an intimate form of knowledge he had not sought and could not now unknow. It was the silence of active computation.</p>
+    <p>"There's a Incredible Connection in Boksburg East. They open until seven. A 1TB external is eleven hundred and ninety-nine rand. I will pay for it and you will settle it against the provisional licensing advance when the agreement is signed." She said this matter-of-factly, in the same voice she used for data architecture. "Alternatively, you can decline and I will find another option. Either is fine."</p>
+    <p>Langa looked at the icon on the shelf. The gold Pantocrator. The patient watchfulness of a face that had been looking at the same corner of this room for eight months.</p>
+    <p>"I will settle it against the advance," he said.</p>
+    <p>"Good. I am sending you the Bolt voucher now. Go directly to the store. Do not attempt to run any write operations on the failing drive until you have the second drive in hand."</p>
+    <p>"I know," he said.</p>
+    <p>"I know you know," she said. "I am saying it anyway."</p>
+    <p>There was something in the last exchange that was different from the ones before. He could not name it precisely. He filed it in the place where he kept the things he was not yet ready to examine, but that place was filling up, and he understood that he would need to examine it soon. After the deal was closed. When the ground was solid.</p>
+    <p>He picked up his jacket. He opened the door. The East Rand evening was warm and copper and indifferent to the urgency of a man's particular Wednesday, and he walked down Sarel Cilliers Street to the road where the Bolt was already waiting — a white Corolla, a different driver this time, a young woman who drove in silence and whose silence was its own form of grace.</p>
+  </div>
+
+  <div class="section">
+    <div class="section-heading">IV. The Recovery</div>
+    <p>He recovered 147,309 rows. He lost two thousand three hundred and thirteen — a week's work, spread across twelve batches, gone to the corrupted partition with the finality of things that are truly gone. He did not try to reconstruct them from memory. He annotated them again from source. This took four days. On the fifth day he uploaded the complete recovered dataset to the RMB cloud bucket and sent Nandi a confirmation email with the checksum.</p>
+    <p>She replied: <em>Received. Integrity confirmed. Ayanda is running the evaluation now. I think you know what she will find.</em></p>
+    <p>He read the email three times in Thabiso's café, on a Saturday, with a mug of Five Roses growing cold beside the keyboard. Through the window, Tsakane was doing what Tsakane did on Saturday afternoons — the slow, persistent, unhurried business of a community that had survived everything thrown at it by simply continuing to be itself, which was, he thought, the most sophisticated form of resilience available.</p>
+    <p>He thought about Sipho. About the word <em>solvent</em>. About 147,309 rows that existed because he had not stopped. About a woman in Meadowlands, Zone 8, who had been given her father's precision and her mother's read of a room, and who had written something in a brown notebook on a shelf in an office in Sandton that he had not read and might never read and would think about anyway.</p>
+    <p>He opened batch forty-seven.</p>
+    <div class="power-note">[ Power: Restored — 18:42 ]</div>
+    <p>Outside, the last of the Highveld light came through the café window at the specific angle that turned everything it touched to gold — the keyboards, the screens, the dust on Thabiso's laminator, the face-brick walls of Tsakane — and Langa Ndimande sat inside it and worked, as he had learned to work, without grasping for the next moment, without mourning the last, awake only to the row in front of him and the one that would come after, and after, and after.</p>
   </div>
 
   <!-- COLOPHON -->
   <div class="colophon" id="colophon">
     <div class="colophon-ornament">— ◆ ◆ ◆ —</div>
-    <p class="colophon-text">End of Chapter Two &nbsp;·&nbsp; To be continued</p>
-    <p style="margin-top:16px; font-style:italic; font-size:14px; color: var(--text-dim); font-family: 'EB Garamond', serif;">
-      <em>"Langa" — to be persistent.</em>
+    <div class="colophon-text">End of The Weight of Terabytes</div>
+    <p class="colophon-note">
+      <em>"Langa" — to be persistent.</em><br><br>
+      The email arrived at 02:13 in the morning.<br>
+      Langa did not open it immediately.<br><br>
+      He had learned to let things arrive before deciding what they were.
+    </p>
+    <p style="margin-top:28px; font-family:'Inconsolata',monospace; font-size:10px; letter-spacing:3px; color: var(--text-dim); text-transform:uppercase;">
+      East Rand · Brakpan · Tsakane · Daveyton · Meadowlands · Sandton
     </p>
   </div>
 
 </div><!-- /page -->
 
 <script>
-  // Intersection Observer — reveal sections on scroll
-  const sections = document.querySelectorAll('.section');
-  const colophon = document.getElementById('colophon');
-
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
@@ -494,10 +792,9 @@
         observer.unobserve(entry.target);
       }
     });
-  }, { threshold: 0.08 });
+  }, { threshold: 0.06 });
 
-  sections.forEach(s => observer.observe(s));
-  observer.observe(colophon);
+  document.querySelectorAll('.section, .colophon').forEach(el => observer.observe(el));
 </script>
 </body>
 </html>
